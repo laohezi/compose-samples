@@ -32,7 +32,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
@@ -58,6 +57,7 @@ import com.example.jetnews.data.posts.impl.BlockingFakePostsRepository
 import com.example.jetnews.data.posts.impl.post3
 import com.example.jetnews.model.Post
 import com.example.jetnews.ui.ThemedPreview
+import com.example.jetnews.ui.components.InsetAwareTopAppBar
 import com.example.jetnews.ui.home.BookmarkButton
 import com.example.jetnews.utils.produceUiState
 import kotlinx.coroutines.launch
@@ -126,7 +126,7 @@ fun ArticleScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            InsetAwareTopAppBar(
                 title = {
                     Text(
                         text = "Published in: ${post.publication?.name}",

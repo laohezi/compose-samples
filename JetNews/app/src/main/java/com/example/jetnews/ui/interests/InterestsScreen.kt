@@ -37,7 +37,6 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -60,6 +59,7 @@ import com.example.jetnews.data.interests.TopicSelection
 import com.example.jetnews.data.interests.TopicsMap
 import com.example.jetnews.data.interests.impl.FakeInterestsRepository
 import com.example.jetnews.ui.ThemedPreview
+import com.example.jetnews.ui.components.InsetAwareTopAppBar
 import com.example.jetnews.utils.produceUiState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -167,7 +167,7 @@ fun InterestsScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(
+            InsetAwareTopAppBar(
                 title = { Text("Interests") },
                 navigationIcon = {
                     IconButton(onClick = { coroutineScope.launch { scaffoldState.drawerState.open() } }) {

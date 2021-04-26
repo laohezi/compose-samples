@@ -19,10 +19,14 @@ package com.example.jetnews.ui
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.example.jetnews.data.AppContainer
 import com.example.jetnews.ui.theme.JetnewsTheme
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
 @Composable
@@ -30,23 +34,32 @@ fun JetnewsApp(
     appContainer: AppContainer
 ) {
     JetnewsTheme {
-        val navController = rememberNavController()
-        val coroutineScope = rememberCoroutineScope()
-        val scaffoldState = rememberScaffoldState()
-        Scaffold(
-            scaffoldState = scaffoldState,
-            drawerContent = {
-                AppDrawer(
-                    closeDrawer = { coroutineScope.launch { scaffoldState.drawerState.close() } },
-                    navController = navController
+        ProvideWindowInsets {
+            // Make system bar transparent. Always use light icons, as the icons will show on either
+            // the red primary color (in light mode) or black (in dark mode).
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = false)
+            }
+
+            val navController = rememberNavController()
+            val coroutineScope = rememberCoroutineScope()
+            val scaffoldState = rememberScaffoldState()
+            Scaffold(
+                scaffoldState = scaffoldState,
+                drawerContent = {
+                    AppDrawer(
+                        closeDrawer = { coroutineScope.launch { scaffoldState.drawerState.close() } },
+                        navController = navController
+                    )
+                }
+            ) {
+                NavGraph(
+                    appContainer = appContainer,
+                    navController = navController,
+                    scaffoldState = scaffoldState
                 )
             }
-        ) {
-            NavGraph(
-                appContainer = appContainer,
-                navController = navController,
-                scaffoldState = scaffoldState
-            )
         }
     }
 }
