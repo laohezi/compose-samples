@@ -229,7 +229,7 @@ private fun LazyListScope.itemsCalendarMonth(
         // A custom key needs to be given to these items so that they can be found in tests that
         // need scrolling. The format of the key is ${year/month/weekNumber}. Thus,
         // the key for the fourth week of December 2020 is "2020/12/4"
-        item(key = "${month.year}/${month.monthNumber}/${index+1}") {
+        item(key = "${month.year}/${month.monthNumber}/${index + 1}") {
             Week(
                 modifier = contentModifier,
                 week = week,
