@@ -31,13 +31,13 @@ class SeriesPcuDetailViewModel : ViewModel() {
 
     fun initData(reset: Boolean = true) {
         val selectedId = flowViewModel.detailGroup.value?.id
-        if (selectedId != null && currentId == selectedId && pageState.value !is PageState.Error) {
+       /* if (selectedId != null && currentId == selectedId && pageState.value !is PageState.Error) {
             return
         }
         if (reset) {
             reset()
-        }
-        currentId = selectedId!!
+        }*/
+        //currentId = selectedId!!
         viewModelScope.launch(coroutineExceptionHandler) {
             pageState.value = PageState.Loading
             try {

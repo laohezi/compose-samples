@@ -34,13 +34,15 @@ fun PreviewLiveBanner() {
     LiveBannerView(json = FBYJsonParser.getJSONFormAssets("banner.json")!!)
 }
 
+
+
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun LiveBannerView(json: JSONObject) {
     val bgColor = json.optJSONObject("background")?.optString("color")
     val content = getByDeviceType(json = json)
-    var paddingTop  by remember { mutableStateOf(10f) }
-    var paddingBottom  by remember { mutableStateOf(10f) }
+    var paddingTop  by remember { mutableStateOf(0f) }
+    var paddingBottom  by remember { mutableStateOf(0f) }
 
     Column(
         Modifier
@@ -49,13 +51,13 @@ fun LiveBannerView(json: JSONObject) {
             )
             .padding(top = paddingTop.dp, bottom = paddingBottom.dp)
             .clickable {
-                paddingTop += 10
+                paddingTop  =30f
             }
     ) {
         for (i in 0 until content.length()) {
             val obj = content.getJSONObject(i)
             if (i ==0){
-               // paddingTop = designSizeToDp(obj.optDouble("top_padding"))
+                paddingTop = designSizeToDp(obj.optDouble("top_padding"))
                 Log.d("test", "LiveBannerView: padding top is $paddingTop")
             }
             if (i== content.length() -1){
