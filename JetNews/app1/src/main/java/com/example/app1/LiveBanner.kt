@@ -24,6 +24,8 @@ import android.text.TextUtils
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import com.example.app1.detail.SeriesPcuDetailViewModel
 import com.example.app1.utils.px2dp
 import java.lang.Exception
 
@@ -34,11 +36,20 @@ fun PreviewLiveBanner() {
     LiveBannerView(json = FBYJsonParser.getJSONFormAssets("banner.json")!!)
 }
 
+@Composable
+fun LiveBannerView(viewModel: SeriesPcuDetailViewModel){
+    val json = viewModel.pageData.banner.observeAsState()
+     json.value?.let { LiveBannerView(json = it as JSONObject) }
+}
+
 
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun LiveBannerView(json: JSONObject) {
+fun LiveBannerView(json: JSONObject?) {
+    if (json == null){
+        return
+    }
     val bgColor = json.optJSONObject("background")?.optString("color")
     val content = getByDeviceType(json = json)
     var paddingTop  by remember { mutableStateOf(0f) }
@@ -51,7 +62,7 @@ fun LiveBannerView(json: JSONObject) {
             )
             .padding(top = paddingTop.dp, bottom = paddingBottom.dp)
             .clickable {
-                paddingTop  =30f
+                paddingTop = 30f
             }
     ) {
         for (i in 0 until content.length()) {
