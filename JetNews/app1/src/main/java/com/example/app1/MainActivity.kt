@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.app1.detail.DetailPage
-import com.example.app1.detail.ImageViewTest
 import com.example.app1.detail.SeriesPcuDetailViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 

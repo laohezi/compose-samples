@@ -7,24 +7,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.widget.ConstraintLayout
 import coil.compose.rememberImagePainter
 import com.example.app1.FBYJsonParser
 import com.example.app1.LiveBannerView
+import com.example.app1.SeriesPcuCategoryItem
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -35,31 +41,45 @@ import jp.wasabeef.composable.glide.GlideImage
 import org.json.JSONObject
 
 
+
 @ExperimentalPagerApi
 @Composable
-fun DetailPage( viewModel: SeriesPcuDetailViewModel) {
-    viewModel.initData()
-    Column() {
-        LiveBannerView(viewModel = viewModel)
-        SampleLooper(viewModel = viewModel)
+fun DetailPage(viewModel: SeriesPcuDetailViewModel) {
+    LaunchedEffect(key1 ="lala"){
+        viewModel.initData()   
+    }
+    Column {
+        viewModel.pageData.banner.observeAsState().value?.apply {
+            LiveBannerView(  this as JSONObject)
+        }
+        viewModel.pageData.samples.observeAsState().value?.apply { 
+            SampleLooper(datas = this)
+        }
+        
+        viewModel.pageData.options.observeAsState().value?.apply { 
+           this.firstOrNull()?.apply { 
+               OptionsView(item = this)
+           }
+        }
     }
 }
+
 @ExperimentalPagerApi
 @Composable
-fun DetailPage(banner:Any?,samples:List<SeriesPcuDetailSampleItem>?){
+fun DetailPage(banner: Any?, samples: List<SeriesPcuDetailSampleItem>?) {
 
 }
 
 @ExperimentalPagerApi
 @Composable
-fun SampleLooper(viewModel:SeriesPcuDetailViewModel) {
-    val datas = viewModel.pageData.samples.observeAsState()
+fun SampleLooper(datas:MutableList<SeriesPcuDetailSampleItem>) {
+
     val pagerState = rememberPagerState(
-        pageCount = datas.value!!.size
+        pageCount = datas!!.size
     )
-    Column() {
+    Column( horizontalAlignment = Alignment.CenterHorizontally) {
         HorizontalPager(state = pagerState) {
-            datas.value!!.forEach { data ->
+            datas!!.forEach { data ->
                 Image(
                     painter = rememberGlidePainter(request = data.sampleUrl),
                     contentDescription = "lal",
@@ -70,23 +90,57 @@ fun SampleLooper(viewModel:SeriesPcuDetailViewModel) {
             }
         }
 
-        HorizontalPagerIndicator(pagerState = pagerState)
+        HorizontalPagerIndicator(pagerState = pagerState,
+        )
+    }
+}
+
+@Composable
+fun OptionsView(item:SeriesPcuCategoryItem){
+    var child  by remember {
+        mutableStateOf<SeriesPcuCategoryItem?>(null)
+    }
+    Column {
+        Text(item.title?:"")
+        LazyRow(){
+            items(item.childs){ it->
+                OptionsItem(item = it,onClick = {c->
+                   child = c
+                })
+            }
+        }
+        child?.let {
+            Column() {
+                OptionsView(item = it)
+            }
+        }
+
+    }
+}
+
+
+
+@Composable
+fun OptionsItem(item: SeriesPcuCategoryItem,onClick:((SeriesPcuCategoryItem) ->Unit)? = null){
+    Column(
+        Modifier
+            .border(1.dp, color = Color.Black)
+            .size(120.dp, 80.dp)
+            .clickable {
+                if (item.childs.size>0){
+                    onClick?.invoke(item)
+                }
+            }
+        ) {
+        Text(text = item.childTypeName,modifier =
+        Modifier.fillMaxWidth(),textAlign = TextAlign.Center
+
+            )
+        Text(text = item.price.toString(),modifier = Modifier.align(CenterHorizontally))
     }
 
 }
-@Preview
-@Composable
-fun ImageViewTest(){
-    Image(painter = rememberImagePainter(
-       "https://img0.baidu.com/it/u=103721101,4076571305&fm=26&fmt=auto&gp=0.jpg"
-    ), contentDescription ="" )
-}
 
-@Preview
-@Composable
-fun TextViewTest(){
-    Text(text = "lalalla")
-}
 
 
 
