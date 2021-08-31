@@ -1,12 +1,12 @@
 package com.example.app1.detail
 
+import SeriesPcuCategoryItem
+import SeriesPcuModel.jsonToCategory
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.app1.PageState
-import com.example.app1.SeriesPcuCategoryItem
 import com.example.app1.SeriesPcuViewModel
-import com.example.app1.jsonToCategory
 import kotlinx.coroutines.*
 import org.json.JSONObject
 

@@ -1,45 +1,54 @@
-package com.example.app1
-
-
-
+import com.example.app1.detail.optStringList
 import org.json.JSONObject
 
-fun jsonToCategory(catJson: JSONObject): SeriesPcuCategoryItem {
-    val category = SeriesPcuCategoryItem()
-    category.apply {
-        json = catJson
-        val list = catJson.optJSONArray("list")
-        if (list != null && list.length() > 0) {
-            for (i in 0 until list.length()) {
-                childs.add(
+object SeriesPcuModel {
+    fun jsonToCategory(catJson: JSONObject): SeriesPcuCategoryItem {
+        val category = SeriesPcuCategoryItem()
+        category.apply {
+            json = catJson
+            val list = catJson.optJSONArray("list")
+            if (list != null && list.length() > 0) {
+                for (i in 0 until list.length()) {
+                    childs.add(
                         jsonToCategory(list.getJSONObject(i)).apply {
                             parent = category
                         }
-                )
+                    )
+                }
             }
+            id = catJson.optString("id")
+            title = catJson.optString("title")
+            price = catJson.optString("price")
+            sort = catJson.optInt("sort")
+            childType = catJson.optString("child_type")
+            childTypeName = catJson.optString("child_type_name")
+            productInfo = catJson.optString("product_info")
+            val jsonArray = catJson.optJSONArray("thumbnails")
+            jsonArray?.let {
+                for (i in 0 until jsonArray.length()) {
+                    jsonArray.optJSONObject(i)?.optString("url")?.let { url ->
+                        thumbnails.add(url)
+                    }
+                }
+            }
+            /*if (thumbnails.isNullOrEmpty()) {
+                thumbnails = catJson.optStringList("thumbnail") as MutableList<String>
+            }*/
+            skuCode = catJson.optString("size")
+            typeIcon = catJson.optString("type_icon")
+            typeName = catJson.optString("type_name")
+            groupId = catJson.optString("group_id")
+            isSaleInt = catJson.optInt("is_sale")
         }
-        id = catJson.optString("id")
-        title = catJson.optString("title")
-        price = catJson.optString("price")?.toDoubleOrNull()?.let {
-            "$${it}"
-        }
-        sort = catJson.optInt("sort")
-        childType = catJson.optString("child_type")
-        childTypeName = catJson.optString("child_type_name")
-        productInfo = catJson.optString("product_info")
-        thumbnail = catJson.optString("thumbnail")
-        skuCode = catJson.optString("size")
-        typeIcon = catJson.optString("type_icon")
-        typeName = catJson.optString("type_name")
-        groupId = catJson.optString("group_id")
-    }
-    return category
+        return category
 
+    }
 }
 
+
 open class SeriesPcuCategoryItem {
-    lateinit var json:JSONObject
-    var thumbnail: String? = null
+    lateinit var json: JSONObject
+    var thumbnails: MutableList<String> = ArrayList()
     var id: String? = null
     var title: String? = null
     var sort: Int = -1
@@ -54,13 +63,18 @@ open class SeriesPcuCategoryItem {
     var skuCode: String? = null
     var typeIcon: String? = null
     var typeName: String? = null
-    var groupId:String? =null
+    var groupId: String? = null
+    var isSaleInt: Int = -1
 
     fun clearStateRecursive() {
         childs.forEach {
             it.selected = false
             it.clearStateRecursive()
         }
+    }
+
+    fun isSale(): Boolean {
+        return isSaleInt == 1
     }
 
 }

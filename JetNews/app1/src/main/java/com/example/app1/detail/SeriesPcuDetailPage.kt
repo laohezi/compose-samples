@@ -1,45 +1,27 @@
 package com.example.app1.detail
 
-import android.os.Bundle
-import android.renderscript.Sampler
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import SeriesPcuCategoryItem
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.widget.ConstraintLayout
-import coil.compose.rememberImagePainter
-import com.example.app1.FBYJsonParser
 import com.example.app1.LiveBannerView
-import com.example.app1.SeriesPcuCategoryItem
-import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
-import jp.wasabeef.composable.glide.GlideImage
 import org.json.JSONObject
-
 
 
 @ExperimentalPagerApi
@@ -58,7 +40,7 @@ fun DetailPage(viewModel: SeriesPcuDetailViewModel) {
         
         viewModel.pageData.options.observeAsState().value?.apply { 
            this.firstOrNull()?.apply { 
-               OptionsView(item = this)
+              // OptionsView(item = this)
            }
         }
     }
@@ -122,10 +104,11 @@ fun OptionsView(item:SeriesPcuCategoryItem){
 
 @Composable
 fun OptionsItem(item: SeriesPcuCategoryItem,onClick:((SeriesPcuCategoryItem) ->Unit)? = null){
-    Column(
+    Box(
         Modifier
             .border(1.dp, color = Color.Black)
             .size(120.dp, 80.dp)
+
             .clickable {
                 if (item.childs.size>0){
                     onClick?.invoke(item)
@@ -136,7 +119,7 @@ fun OptionsItem(item: SeriesPcuCategoryItem,onClick:((SeriesPcuCategoryItem) ->U
         Modifier.fillMaxWidth(),textAlign = TextAlign.Center
 
             )
-        Text(text = item.price.toString(),modifier = Modifier.align(CenterHorizontally))
+        Text(text = item.price.toString())
     }
 
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.app1.detail.DetailPage
 import com.example.app1.detail.SeriesPcuDetailViewModel
+import com.example.app1.list.ListPage
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.flowViewModel = flowViewModel
 
         setContent {
-          DetailPage(viewModel = viewModel)
+          ListPage()
         }
     }
 }

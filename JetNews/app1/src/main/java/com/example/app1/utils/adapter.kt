@@ -1,6 +1,10 @@
 package com.example.app1.utils
 
+import android.content.Context
 import android.content.res.Resources
+import android.util.DisplayMetrics
+import android.view.WindowManager
+import androidx.fragment.app.FragmentActivity
 import com.example.app1.appContext
 
 fun px2dp(pxValue: Float): Float {
@@ -18,3 +22,8 @@ fun px2sp(pxValue: Float): Float {
     val fontScale: Float = appContext.getResources().getDisplayMetrics().scaledDensity
     return pxValue / fontScale
 }
+
+fun getScreenWidth(): Int {
+   return (appContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager ).defaultDisplay.width
+}
+
