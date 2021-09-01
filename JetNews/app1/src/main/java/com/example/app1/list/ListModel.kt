@@ -23,6 +23,7 @@ class ListViewModel :ViewModel() {
                 for (i in 0 until  list.length()){
                     items.add(SeriesPcuModel.jsonToCategory(list.optJSONObject(i)))
                 }
+                banner = it.optString("banner").replace("%@", "_aspect_ratio_2")
             }
     }
 

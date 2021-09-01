@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.app1.LiveBannerView
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -26,7 +27,8 @@ import org.json.JSONObject
 
 @ExperimentalPagerApi
 @Composable
-fun DetailPage(viewModel: SeriesPcuDetailViewModel) {
+fun DetailPage() {
+    val viewModel = viewModel(modelClass = SeriesPcuDetailViewModel::class.java)
     LaunchedEffect(key1 ="lala"){
         viewModel.initData()   
     }
@@ -38,19 +40,13 @@ fun DetailPage(viewModel: SeriesPcuDetailViewModel) {
             SampleLooper(datas = this)
         }
         
-        viewModel.pageData.options.observeAsState().value?.apply { 
-           this.firstOrNull()?.apply { 
-              // OptionsView(item = this)
-           }
+        viewModel.pageData.options.observeAsState().value?.firstOrNull()?.apply {
+              OptionsView(item = this)
         }
     }
 }
 
-@ExperimentalPagerApi
-@Composable
-fun DetailPage(banner: Any?, samples: List<SeriesPcuDetailSampleItem>?) {
 
-}
 
 @ExperimentalPagerApi
 @Composable
@@ -110,7 +106,7 @@ fun OptionsItem(item: SeriesPcuCategoryItem,onClick:((SeriesPcuCategoryItem) ->U
             .size(120.dp, 80.dp)
 
             .clickable {
-                if (item.childs.size>0){
+                if (item.childs.size > 0) {
                     onClick?.invoke(item)
                 }
             }

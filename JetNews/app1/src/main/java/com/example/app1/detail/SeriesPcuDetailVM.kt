@@ -11,7 +11,6 @@ import kotlinx.coroutines.*
 import org.json.JSONObject
 
 class SeriesPcuDetailViewModel : ViewModel() {
-    lateinit var flowViewModel: SeriesPcuViewModel
 
     var model = SeriesPcuDetailModel()
     lateinit var impl: ViewModelImpl
@@ -30,7 +29,7 @@ class SeriesPcuDetailViewModel : ViewModel() {
 
 
     fun initData(reset: Boolean = true) {
-        val selectedId = flowViewModel.detailGroup.value?.id
+
        /* if (selectedId != null && currentId == selectedId && pageState.value !is PageState.Error) {
             return
         }
@@ -87,7 +86,7 @@ class SeriesPcuDetailViewModel : ViewModel() {
 
     private suspend fun _initData(scope: CoroutineScope): JSONObject {
         return withContext(scope.coroutineContext) {
-            var json: JSONObject = model.getPageDate(flowViewModel.detailGroup.value?.groupId)
+            var json: JSONObject = model.getPageDate("")
             if (!json.optBoolean("result")) {
                 throw Exception(json.optString("message"))
             }
@@ -103,9 +102,9 @@ class SeriesPcuDetailViewModel : ViewModel() {
         }
     }
 
-    fun groupIsLeafNode(): Boolean {
+    /*fun groupIsLeafNode(): Boolean {
         return isLeafNode(flowViewModel.detailGroup.value)
-    }
+    }*/
 }
 
 
